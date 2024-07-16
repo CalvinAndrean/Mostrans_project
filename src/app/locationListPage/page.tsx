@@ -18,15 +18,28 @@ const LocationListPage = () => {
     }
   }, []);
 
-  const allLocations = allLocalCharacterData.flatMap((character: any) => character.locations || []);
-  const uniqueLocations = Array.from(new Set(allLocations.map((location: string) => location && location.toLowerCase())))
-    .filter((location) => location !== undefined);
-  const uniqueLocationsCapitalized = uniqueLocations.map((location) => {
-    if (typeof location === 'string') {
-      return location.charAt(0).toUpperCase() + location.slice(1);
-    }
-    return '';
-  });
+  const getAllLocations = () => {
+    return allLocalCharacterData.flatMap((character: any) => character.locations || []);
+  };
+
+  const getUniqueLocations = (locations: string[]) => {
+    const lowerCaseLocations = locations.map((location: string) => location && location.toLowerCase());
+    const uniqueLocations = Array.from(new Set(lowerCaseLocations)).filter((location) => location !== undefined);
+    return uniqueLocations;
+  };
+
+  const capitalizeLocations = (locations: string[]) => {
+    return locations.map((location) => {
+      if (typeof location === 'string') {
+        return location.charAt(0).toUpperCase() + location.slice(1);
+      }
+      return '';
+    });
+  };
+
+  const allLocations = getAllLocations();
+  const uniqueLocations = getUniqueLocations(allLocations);
+  const uniqueLocationsCapitalized = capitalizeLocations(uniqueLocations);
 
   const filteredCharacters = allLocalCharacterData.filter((character: Character) => {
     return character.locations && character.locations.map((loc) => loc.toLowerCase()).includes(selectedLocation.toLowerCase());
