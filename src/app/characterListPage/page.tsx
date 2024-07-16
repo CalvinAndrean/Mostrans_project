@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react'
 import CardComponent from '../components/card/Card';
 import { Character, CharacterList } from '../types/types';
 import { useRouter } from 'next/navigation';
-import Cookies from 'js-cookie';
 
 const CharacterListPage = () => {
   const [characterData, setCharacterData] = useState<Character[]>([]);
@@ -28,7 +27,6 @@ const CharacterListPage = () => {
             location: []
           }
         });
-        console.log('savedCharacterData --- ', savedCharacterData);
         localStorage.setItem('characters_data', JSON.stringify(savedCharacterData));
       }
     };

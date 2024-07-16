@@ -68,7 +68,7 @@ const DetailCharacterPage: React.FC<DetailCharacterPageProps> = ({ params: { slu
     saveLocationsToLocalStorage(updatedLocations);
     setNewLocation('');
     setError('');
-    onClose(); // Close the modal after successful addition
+    onClose();
   };
 
   return (

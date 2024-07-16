@@ -19,7 +19,7 @@ export default function NavbarComponent() {
 
   const handleMenuItemClick = (path: string) => {
     router.push(path);
-    setIsMenuOpen(false); // Close the menu after navigation
+    setIsMenuOpen(false);
   };
 
   return (
@@ -54,14 +54,6 @@ export default function NavbarComponent() {
       <NavbarMenu>
         {menuItems.map((item, index) => (
           <NavbarMenuItem key={`${item.label}-${index}`}>
-            {/* <Link
-              color={index === 0 ? "primary" : index === 1 ? "danger" : "foreground"}
-              className="w-full"
-              href={item.path}
-              onClick={() => setIsMenuOpen(false)} // Close the menu after navigation
-            >
-              {item.label}
-            </Link> */}
             <Link
               color={isActive(item.path) ? "primary" : "foreground"}
               onPress={() => {
