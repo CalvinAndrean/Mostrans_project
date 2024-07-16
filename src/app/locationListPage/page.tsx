@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import NavbarComponent from '../components/navbar/Navbar';
-import { Button, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Card } from '@nextui-org/react';
+import { Button, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from '@nextui-org/react';
 import CardComponent from '../components/card/Card';
 import { Character } from '../types/types';
 import { useRouter } from 'next/navigation';
@@ -9,8 +9,15 @@ import { useRouter } from 'next/navigation';
 const LocationListPage = () => {
   const router = useRouter();
   const [selectedLocation, setSelectedLocation] = useState<string>('');
+  const [allLocalCharacterData, setAllLocalCharacterData] = useState<Character[]>([]);
 
-  const allLocalCharacterData = JSON.parse(localStorage.getItem('characters_data') || '[]');
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const storedCharacters = JSON.parse(localStorage.getItem('characters_data') || '[]');
+      setAllLocalCharacterData(storedCharacters);
+    }
+  }, []);
+
   const allLocations = allLocalCharacterData.flatMap((character: any) => character.locations || []);
   const uniqueLocations = Array.from(new Set(allLocations.map((location: string) => location && location.toLowerCase())))
     .filter((location) => location !== undefined);
@@ -20,8 +27,9 @@ const LocationListPage = () => {
     }
     return '';
   });
+
   const filteredCharacters = allLocalCharacterData.filter((character: Character) => {
-    return character.locations && character.locations.map((loc) => loc).includes(selectedLocation);
+    return character.locations && character.locations.map((loc) => loc.toLowerCase()).includes(selectedLocation.toLowerCase());
   });
 
   const handleSelectLocation = (location: string) => {
@@ -29,8 +37,8 @@ const LocationListPage = () => {
   };
 
   const cardOnClick = (character: Character) => {
-    router.push(`/detailCharacterPage/${character.id}`)
-  }
+    router.push(`/detailCharacterPage/${character.id}`);
+  };
 
   return (
     <div>
