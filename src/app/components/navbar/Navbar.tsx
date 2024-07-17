@@ -42,7 +42,7 @@ export default function NavbarComponent() {
               aria-current={isActive(item.path) ? "page" : undefined}
               color={isActive(item.path) ? "primary" : "foreground"}
             >
-              {item.label}
+              <p className="hover:cursor-pointer">{item.label}</p>
             </Link>
           </NavbarItem>
         ))}
@@ -60,8 +60,9 @@ export default function NavbarComponent() {
                 handleMenuItemClick(item.path);
                 setIsMenuOpen(false);
               }} 
-              aria-current={isActive(item.path) ? "page" : undefined}>
-              {item.label}
+              aria-current={isActive(item.path) ? "page" : undefined}
+            >
+              <p className="hover:cursor-pointer">{item.label}</p>
             </Link>
           </NavbarMenuItem>
         ))}
