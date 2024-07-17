@@ -19,9 +19,30 @@ const DetailCharacterPage: React.FC<DetailCharacterPageProps> = ({ params: { slu
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const fetchData = async () => {
-    const response = await fetch(`https://rickandmortyapi.com/api/character/${slug}`);
-    const jsonResponse = await response.json();
-    setCharacterData(jsonResponse);
+    const query = `
+      {
+        character(id: ${slug}) {
+          id
+          name
+          status
+          species
+          type
+          gender
+          image
+        }
+      }
+    `;
+
+    const response = await fetch('https://rickandmortyapi.com/graphql', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ query }),
+    });
+
+    const { data } = await response.json();
+    setCharacterData(data.character);
   };
 
   useEffect(() => {
@@ -79,8 +100,10 @@ const DetailCharacterPage: React.FC<DetailCharacterPageProps> = ({ params: { slu
           <Image
             alt="Card background"
             className="object-cover rounded-xl"
-            src={`${characterData ? characterData.image : "https://robohash.org/200"}`}
+            src={characterData?.image}
             width={270}
+            loading='lazy'
+            isLoading={characterData ? false : true}
           />
           <hr className='my-4 border-1 border-black' />
           <div className='flex flex-col space-y-2'>

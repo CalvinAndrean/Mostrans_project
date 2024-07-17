@@ -10,12 +10,36 @@ const CharacterListPage = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const responseCharacter = await fetch('https://rickandmortyapi.com/api/character');
-      const jsonResponseCharacter = await responseCharacter.json();
-      setCharacterData(jsonResponseCharacter.results);
+      const query = `
+        {
+          characters {
+            results {
+              id
+              name
+              status
+              species
+              type
+              gender
+              image
+            }
+          }
+        }
+      `;
+
+      const response = await fetch('https://rickandmortyapi.com/graphql', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ query }),
+      });
+
+      const { data } = await response.json();
+      const fetchedCharacterData = data.characters.results;
+      setCharacterData(fetchedCharacterData);
 
       if(localStorage.getItem('characters_data') === null) {
-        const savedCharacterData = jsonResponseCharacter.results.map((character: Character) => {
+        const savedCharacterData = fetchedCharacterData.results.map((character: Character) => {
           return {
             id: character.id,
             name: character.name,
